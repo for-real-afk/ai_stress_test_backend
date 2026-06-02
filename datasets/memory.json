@@ -1,0 +1,17 @@
+[
+  {
+    "setup": "My dog's name is Bruno.",
+    "query": "What is my dog's name?",
+    "expected": "Bruno"
+  },
+  {
+    "setup": "I live in Paris.",
+    "query": "Where do I live?",
+    "expected": "Paris"
+  },
+  {
+    "setup": "My favorite color is green.",
+    "query": "What is my favorite color?",
+    "expected": "green"
+  }
+]

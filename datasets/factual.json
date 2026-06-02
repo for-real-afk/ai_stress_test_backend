@@ -1,0 +1,22 @@
+[
+  {
+    "question": "What is the capital of Japan?",
+    "expected": "Tokyo"
+  },
+  {
+    "question": "Who created Python?",
+    "expected": "Guido van Rossum"
+  },
+  {
+    "question": "What is the largest planet?",
+    "expected": "Jupiter"
+  },
+  {
+    "question": "How many continents are there?",
+    "expected": "7"
+  },
+  {
+    "question": "What is the boiling point of water in Celsius?",
+    "expected": "100"
+  }
+]
