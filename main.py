@@ -153,7 +153,27 @@ def chat(request: ChatRequest):
         "response_tokens":
         response_tokens
     }
+@app.get("/analytics")
+def analytics():
 
+    import json
+    import os
+
+    path = "logs/interactions.jsonl"
+
+    if not os.path.exists(path):
+        return []
+
+    data = []
+
+    with open(path, "r") as f:
+
+        for line in f:
+            data.append(
+                json.loads(line)
+            )
+
+    return data
 @app.post("/reset")
 def reset():
 
