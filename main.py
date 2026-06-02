@@ -20,9 +20,6 @@ from providers.gemini_provider import (
 
 from providers.grok_provider import GroqProvider
 
-from providers.qwen_provider import (
-    QwenProvider
-)
 
 from services.memory_service import (
     MemoryService
@@ -42,8 +39,7 @@ memory = MemoryService()
 
 providers = {
     "gemini": GeminiProvider(),
-    "groq": GroqProvider(),
-    "qwen": QwenProvider()
+    "groq": GroqProvider()
 }
 
 
