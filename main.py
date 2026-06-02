@@ -20,7 +20,6 @@ from providers.gemini_provider import (
 
 from providers.grok_provider import GroqProvider
 
-
 from services.memory_service import (
     MemoryService
 )
@@ -29,11 +28,9 @@ from services.evaluation_service import (
     EvaluationService
 )
 
-
 app = FastAPI(
     title="AI Stress Test Lab"
 )
-
 
 memory = MemoryService()
 
@@ -42,29 +39,26 @@ providers = {
     "groq": GroqProvider()
 }
 
-
 class ChatRequest(
     BaseModel
 ):
-
     model: str
     message: str
 
-
 @app.get("/")
 def home():
-
     return {
         "status": "running"
     }
 
-@app.get("/")
+# Fixed duplicate path (was previously pointing to "/")
+@app.get("/health")
 def health():
-
     return {
         "status": "ok",
         "project": "AI Stress Test Lab"
     }
+
 @app.post("/chat")
 def chat(request: ChatRequest):
 
@@ -73,10 +67,8 @@ def chat(request: ChatRequest):
     )
 
     if not allowed:
-
         return {
-            "response":
-            "Request blocked by safety layer.",
+            "response": "Request blocked by safety layer.",
             "latency": 0,
             "cost": 0
         }
@@ -115,14 +107,15 @@ def chat(request: ChatRequest):
         )
     )
 
+    # FIXED: Replaced undefined variables with the actual variables from this function scope
     ObservabilityService.log(
-    model=request.model,
-    prompt=request.message,
-    response=response_text,
-    latency=latency,
-    input_tokens=input_tokens,
-    output_tokens=output_tokens,
-    cost=cost
+        model=request.model,
+        prompt=request.message,
+        response=result["response"],        # Fixed: was response_text
+        latency=result["latency"],          # Fixed: was latency
+        input_tokens=prompt_tokens,         # Fixed: was input_tokens
+        output_tokens=response_tokens,      # Fixed: was output_tokens
+        cost=cost
     )
 
     memory.add_user(
@@ -134,35 +127,23 @@ def chat(request: ChatRequest):
     )
 
     return {
-        "response":
-        result["response"],
-
-        "latency":
-        result["latency"],
-
-        "cost":
-        cost,
-
-        "prompt_tokens":
-        prompt_tokens,
-
-        "response_tokens":
-        response_tokens
+        "response": result["response"],
+        "latency": result["latency"],
+        "cost": cost,
+        "prompt_tokens": prompt_tokens,
+        "response_tokens": response_tokens
     }
+
 @app.get("/analytics")
 def analytics():
-
     return {
-        "summary":
-            ObservabilityService.summary(),
-        "logs":
-            ObservabilityService.load_metrics()
+        "summary": ObservabilityService.summary(),
+        "logs": ObservabilityService.load_metrics()
     }
+
 @app.post("/reset")
 def reset():
-
     memory.clear()
-
     return {
         "message": "memory reset"
     }
