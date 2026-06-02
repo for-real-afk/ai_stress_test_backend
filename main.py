@@ -118,10 +118,10 @@ def chat(request: ChatRequest):
     ObservabilityService.log(
     model=request.model,
     prompt=request.message,
-    response=result["response"],
-    latency=result["latency"],
-    prompt_tokens=prompt_tokens,
-    response_tokens=response_tokens,
+    response=response_text,
+    latency=latency,
+    input_tokens=input_tokens,
+    output_tokens=output_tokens,
     cost=cost
     )
 
@@ -152,24 +152,12 @@ def chat(request: ChatRequest):
 @app.get("/analytics")
 def analytics():
 
-    import json
-    import os
-
-    path = "logs/interactions.jsonl"
-
-    if not os.path.exists(path):
-        return []
-
-    data = []
-
-    with open(path, "r") as f:
-
-        for line in f:
-            data.append(
-                json.loads(line)
-            )
-
-    return data
+    return {
+        "summary":
+            ObservabilityService.summary(),
+        "logs":
+            ObservabilityService.load_metrics()
+    }
 @app.post("/reset")
 def reset():
 
